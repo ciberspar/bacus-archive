@@ -5,159 +5,224 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="theme-color" content="#f7faf9">
-  <meta name="description" content="Bacus-Archive: un espacio para organizar tus archivos.">
+  <meta name="description" content="Bacus-Archive: almacenamiento de archivos en la nube.">
   <title>Bacus-Archive — Tu espacio digital</title>
   <link rel="stylesheet" href="styles.css">
+
+  <!-- SDK oficial de Appwrite -->
+  <script src="https://cdn.jsdelivr.net/npm/appwrite@29.2.0"></script>
   <script src="app.js" defer></script>
 </head>
 <body>
-  <aside class="sidebar" id="sidebar">
-    <a class="brand" href="#inicio" aria-label="Bacus-Archive inicio">
-      <span class="brand-icon">B</span>
-      <span>Bacus<span class="brand-light">Archive</span></span>
-    </a>
 
-    <p class="nav-heading">ESPACIO PERSONAL</p>
-    <nav aria-label="Navegación principal">
-      <a class="nav-link active" href="#inicio" data-view="inicio">
-        <span>⌂</span> Inicio
+  <!-- ACCESO -->
+  <main id="authScreen" class="auth-screen">
+    <section class="auth-card">
+      <a class="brand" href="#">
+        <span class="brand-icon">B</span>
+        <span>Bacus<span class="brand-light">Archive</span></span>
       </a>
-      <a class="nav-link" href="#archivos" data-view="archivos">
-        <span>▤</span> Mis archivos
-      </a>
-      <a class="nav-link" href="#recientes" data-view="recientes">
-        <span>◷</span> Recientes
-      </a>
-      <a class="nav-link" href="#favoritos" data-view="favoritos">
-        <span>☆</span> Favoritos
-      </a>
-      <a class="nav-link" href="#papelera" data-view="papelera">
-        <span>♲</span> Papelera
-      </a>
-    </nav>
 
-    <div class="sidebar-bottom">
-      <div class="storage-card">
-        <span class="storage-icon">☁</span>
-        <strong>Tu espacio</strong>
-        <p>Demostración local</p>
-        <div class="storage-track"><span></span></div>
-        <small>El almacenamiento en la nube aún no está conectado.</small>
-      </div>
-      <a class="nav-link" href="#privacidad" data-view="privacidad">
-        <span>♧</span> Privacidad
-      </a>
-    </div>
-  </aside>
+      <h1 id="authTitle">Tu espacio digital.</h1>
+      <p id="authDescription">
+        Iniciá sesión para acceder a tus archivos.
+      </p>
 
-  <main class="main-content" id="inicio">
-    <header class="topbar">
-      <button class="menu-button" id="menuButton"
-        aria-label="Abrir menú" aria-expanded="false">☰</button>
-      <div class="breadcrumb">Bacus-Archive <span>/</span> <strong id="currentSection">Inicio</strong></div>
-      <div class="topbar-right">
-        <span class="status-dot"></span>
-        <span class="demo-label">Modo demostración</span>
-      </div>
-    </header>
-
-    <section class="page">
-      <div class="welcome">
-        <div>
-          <p class="eyebrow">TU ESPACIO DIGITAL</p>
-          <h1 id="pageTitle">Todo en su lugar.</h1>
-          <p class="subtitle" id="pageDescription">
-            Un espacio sencillo para explorar y organizar tus archivos.
-          </p>
-        </div>
-        <span class="welcome-symbol" aria-hidden="true">◈</span>
-      </div>
-
-      <div class="notice" role="status">
-        <span>ⓘ</span>
-        <p>
-          <strong>Versión inicial.</strong>
-          Los archivos todavía no se suben a un servidor.
-          Tus selecciones se procesan en esta página.
-        </p>
-      </div>
-
-      <section class="toolbar" aria-label="Herramientas de archivos">
-        <label class="search-box">
-          <span>⌕</span>
-          <input id="searchInput" type="search"
-            placeholder="Buscar archivos..." autocomplete="off">
-          <kbd>/</kbd>
+      <form id="authForm">
+        <label for="authName" id="authNameLabel" hidden>
+          Nombre
         </label>
+        <input id="authName" type="text"
+          placeholder="Tu nombre" autocomplete="name" hidden>
 
-        <label class="upload-button" for="fileInput">
-          <span>＋</span> Seleccionar archivos
-        </label>
-        <input id="fileInput" type="file" multiple hidden>
-      </section>
+        <label for="authEmail">Correo electrónico</label>
+        <input id="authEmail" type="email"
+          placeholder="correo@ejemplo.com"
+          autocomplete="email" required>
 
-      <section class="section-block" id="overview">
-        <div class="section-title">
-          <div>
-            <h2>Tu biblioteca</h2>
-            <p>Una vista general de tus archivos seleccionados.</p>
-          </div>
-          <span class="count-pill" id="fileCount">0 archivos</span>
-        </div>
+        <label for="authPassword">Contraseña</label>
+        <input id="authPassword" type="password"
+          placeholder="Tu contraseña"
+          autocomplete="current-password"
+          minlength="8" required>
 
-        <div class="category-grid">
-          <button class="category-card" data-filter="all">
-            <span class="category-icon teal">▤</span>
-            <span><strong>Todos los archivos</strong><small>Ver biblioteca completa</small></span>
-            <span class="category-arrow">→</span>
-          </button>
-          <button class="category-card" data-filter="image">
-            <span class="category-icon lavender">▧</span>
-            <span><strong>Imágenes</strong><small>Fotos y gráficos</small></span>
-            <span class="category-arrow">→</span>
-          </button>
-          <button class="category-card" data-filter="document">
-            <span class="category-icon amber">▤</span>
-            <span><strong>Documentos</strong><small>PDF y textos</small></span>
-            <span class="category-arrow">→</span>
-          </button>
-          <button class="category-card" data-filter="other">
-            <span class="category-icon blue">◇</span>
-            <span><strong>Otros archivos</strong><small>Resto de formatos</small></span>
-            <span class="category-arrow">→</span>
-          </button>
-        </div>
-      </section>
+        <button id="authSubmit" class="upload-button" type="submit">
+          Iniciar sesión
+        </button>
+      </form>
 
-      <section class="section-block" id="library">
-        <div class="section-title">
-          <div>
-            <h2 id="libraryTitle">Archivos seleccionados</h2>
-            <p id="libraryDescription">Seleccioná archivos para verlos aquí.</p>
-          </div>
-          <button class="text-button" id="clearSearch">Limpiar búsqueda</button>
-        </div>
+      <p id="authMessage" role="status" aria-live="polite"></p>
 
-        <div class="empty-state" id="emptyState">
-          <div class="empty-illustration">▱</div>
-          <h3>Tu espacio está listo</h3>
-          <p>Seleccioná archivos desde tu dispositivo para verlos en esta página.</p>
-          <label class="upload-button secondary-button" for="fileInput">
-            ＋ Elegir archivos
-          </label>
-          <small>No se realiza ninguna subida a Internet.</small>
-        </div>
-
-        <div class="file-grid" id="fileGrid" aria-live="polite"></div>
-      </section>
-
-      <footer class="footer">
-        <a class="footer-brand" href="#inicio">Bacus-Archive</a>
-        <span>Un espacio digital hecho para todos.</span>
-        <span>Proyecto en desarrollo</span>
-      </footer>
+      <button id="authSwitch" class="text-button" type="button">
+        ¿No tenés cuenta? Registrate
+      </button>
     </section>
   </main>
+
+  <!-- APLICACIÓN -->
+  <div id="appScreen" hidden>
+
+    <aside class="sidebar" id="sidebar">
+      <a class="brand" href="#inicio">
+        <span class="brand-icon">B</span>
+        <span>Bacus<span class="brand-light">Archive</span></span>
+      </a>
+
+      <p class="nav-heading">ESPACIO PERSONAL</p>
+
+      <nav aria-label="Navegación principal">
+        <a class="nav-link active" href="#inicio" data-view="inicio">
+          <span>⌂</span> Inicio
+        </a>
+        <a class="nav-link" href="#archivos" data-view="archivos">
+          <span>▤</span> Mis archivos
+        </a>
+        <a class="nav-link" href="#recientes" data-view="recientes">
+          <span>◷</span> Recientes
+        </a>
+        <a class="nav-link" href="#favoritos" data-view="favoritos">
+          <span>☆</span> Favoritos
+        </a>
+        <a class="nav-link" href="#papelera" data-view="papelera">
+          <span>♲</span> Papelera
+        </a>
+      </nav>
+
+      <div class="sidebar-bottom">
+        <div class="storage-card">
+          <span class="storage-icon">☁</span>
+          <strong>Tu espacio</strong>
+          <p id="storageStatus">Conectando...</p>
+          <div class="storage-track"><span></span></div>
+          <small>Almacenamiento en Appwrite.</small>
+        </div>
+
+        <a class="nav-link" href="#privacidad" data-view="privacidad">
+          <span>♧</span> Privacidad
+        </a>
+      </div>
+    </aside>
+
+    <main class="main-content" id="inicio">
+      <header class="topbar">
+        <button class="menu-button" id="menuButton"
+          aria-label="Abrir menú" aria-expanded="false">☰</button>
+
+        <div class="breadcrumb">
+          Bacus-Archive /
+          <strong id="currentSection">Inicio</strong>
+        </div>
+
+        <div class="topbar-right">
+          <span id="userEmail"></span>
+          <button id="logoutButton" class="text-button" type="button">
+            Cerrar sesión
+          </button>
+        </div>
+      </header>
+
+      <section class="page">
+        <div class="welcome">
+          <div>
+            <p class="eyebrow">TU ESPACIO DIGITAL</p>
+            <h1 id="pageTitle">Todo en su lugar.</h1>
+            <p class="subtitle" id="pageDescription">
+              Tus archivos, disponibles desde tus dispositivos.
+            </p>
+          </div>
+          <span class="welcome-symbol" aria-hidden="true">◈</span>
+        </div>
+
+        <div class="notice" id="appNotice" role="status">
+          <span>ⓘ</span>
+          <p id="noticeText">Conectando con el almacenamiento...</p>
+        </div>
+
+        <section class="toolbar" aria-label="Herramientas de archivos">
+          <label class="search-box">
+            <span>⌕</span>
+            <input id="searchInput" type="search"
+              placeholder="Buscar archivos..." autocomplete="off">
+            <kbd>/</kbd>
+          </label>
+
+          <label class="upload-button" for="fileInput">
+            <span>＋</span> Subir archivos
+          </label>
+          <input id="fileInput" type="file" multiple hidden>
+        </section>
+
+        <section class="section-block" id="overview">
+          <div class="section-title">
+            <div>
+              <h2>Tu biblioteca</h2>
+              <p>Archivos de tu cuenta.</p>
+            </div>
+            <span class="count-pill" id="fileCount">0 archivos</span>
+          </div>
+
+          <div class="category-grid">
+            <button class="category-card" data-filter="all">
+              <span class="category-icon teal">▤</span>
+              <span><strong>Todos los archivos</strong>
+                <small>Ver biblioteca completa</small></span>
+              <span class="category-arrow">→</span>
+            </button>
+
+            <button class="category-card" data-filter="image">
+              <span class="category-icon lavender">▧</span>
+              <span><strong>Imágenes</strong>
+                <small>Fotos y gráficos</small></span>
+              <span class="category-arrow">→</span>
+            </button>
+
+            <button class="category-card" data-filter="document">
+              <span class="category-icon amber">▤</span>
+              <span><strong>Documentos</strong>
+                <small>PDF y textos</small></span>
+              <span class="category-arrow">→</span>
+            </button>
+
+            <button class="category-card" data-filter="other">
+              <span class="category-icon blue">◇</span>
+              <span><strong>Otros archivos</strong>
+                <small>Otros formatos</small></span>
+              <span class="category-arrow">→</span>
+            </button>
+          </div>
+        </section>
+
+        <section class="section-block" id="library">
+          <div class="section-title">
+            <div>
+              <h2 id="libraryTitle">Mis archivos</h2>
+              <p id="libraryDescription">Tu almacenamiento personal.</p>
+            </div>
+            <button class="text-button" id="clearSearch" type="button">
+              Limpiar búsqueda
+            </button>
+          </div>
+
+          <div class="empty-state" id="emptyState">
+            <div class="empty-illustration">▱</div>
+            <h3>Tu espacio está listo</h3>
+            <p>Subí tu primer archivo a Bacus-Archive.</p>
+            <label class="upload-button secondary-button" for="fileInput">
+              ＋ Elegir archivos
+            </label>
+          </div>
+
+          <div class="file-grid" id="fileGrid" aria-live="polite"></div>
+        </section>
+
+        <footer class="footer">
+          <a class="footer-brand" href="#inicio">Bacus-Archive</a>
+          <span>Un espacio digital hecho para todos.</span>
+          <span>Proyecto en desarrollo</span>
+        </footer>
+      </section>
+    </main>
+  </div>
 
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
 </body>
